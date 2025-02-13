@@ -1,4 +1,5 @@
 <x-layout>
+    @section('title', 'Data Master - GradeFlow')
     <div class="container-fluid mt-4">
         <h2 class="mb-4">Data Master</h2>
         <div class="row justify-content-center">

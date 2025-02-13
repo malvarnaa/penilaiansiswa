@@ -21,11 +21,6 @@ class Kelas extends Model
         return $this->belongsToMany(Mapel::class, 'guru_mapel');
     }
 
-    public function guru()
-    {
-        return $this->belongsToMany(Guru::class, 'guru_mapel', 'kelas_id', 'guru_id');
-    }
-
     public function siswa()
     {
         return $this->hasMany(Siswa::class);
@@ -35,4 +30,14 @@ class Kelas extends Model
     {
         return $this->belongsTo(Jurusan::class);
     }
+    public function guruMapel()
+    {
+        return $this->hasMany(GuruMapel::class, 'kelas_id');
+    }
+
+    public function guru()
+    {
+        return $this->belongsToMany(Guru::class, 'guru_mapel', 'kelas_id', 'guru_id');
+    }
+
 }

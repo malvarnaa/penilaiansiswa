@@ -1,7 +1,9 @@
 <x-layout>
+    @section('title','Data Kelas - GradeFlow')
     <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
         <h2>Data Kelas</h2>
         <a href="{{ route('admin.dataMaster') }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('kelas.all') }}" class="btn btn-secondary">Lihat Semua Kelas</a>
     </div>  
 
     <div class="d-flex flex-wrap justify-content-center">

@@ -1,6 +1,7 @@
 <x-layout>
+    @section('title', 'Konsentrasi Keahlian - GradeFlow')
     <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
-        <h2>Program Keahlian</h2>
+        <h2>Konsentrasi Keahlian</h2>
         <a href="{{ route('admin.dataMaster') }}" class="btn btn-secondary">Kembali</a>
     </div>  
 
@@ -17,6 +18,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if($jurusans->isEmpty())
+                        <tr>
+                            <td colspan="4" style="text-algin:center; ">Tidak ada Data yang harus ditampilkan.</td>
+                        </tr>
+                    @endif
                     @foreach($jurusans as $index => $jurusan)
                     <tr>
                         <td>{{ $index + 1 }}</td>
@@ -24,7 +30,7 @@
                         <td>{{ $jurusan->kode_jurusan }}</td>
                         <td>
                             <!-- Edit Button -->
-                            <a href="{{ route('jurusan.edit', $jurusan->id) }}" class="btn btn-sm btn-warning"  data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $jurusan->id }}" title="Edit">
+                            <a href="{{ route('jurusan.edit', $jurusan->id) }}" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal-{{ $jurusan->id }}" title="Edit">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                             <!-- Delete Button (using form for delete) -->

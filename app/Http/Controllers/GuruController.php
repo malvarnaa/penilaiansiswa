@@ -17,18 +17,16 @@ use Illuminate\Support\Facades\Storage;
 
 class GuruController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $judul = 'Data Guru';
+        $title = 'Data Guru';
         $mapels = Mapel::all();
         $jurusan = Jurusan::all();
         $kelas = Kelas::all();
         $gurus = Guru::with('mapel')->get();
 
-        return view('guru.dataguru', compact('judul', 'gurus', 'mapels', 'kelas', 'jurusan'));
+        return view('guru.dataguru', compact('title', 'gurus', 'mapels', 'kelas', 'jurusan'));
     }
 
     public function create()
@@ -144,6 +142,7 @@ class GuruController extends Controller
 
     public function edit($id)
     {
+        $gurus = Guru::with('guru_mapel')->get();
         $guru = Guru::with('mapel')->findOrFail($id);
         $jurusan = Jurusan::all();
         $kelas = Kelas::all();

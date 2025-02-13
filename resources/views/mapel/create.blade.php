@@ -10,16 +10,30 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="mapel" class="form-label">Nama Mata Pelajaran</label>
-                        <input type="text" class="form-control" id="mapel" name="mapel" required>
+                        <input type="text" class="form-control" id="mapel" name="mapel" placeholder="KETIK MAPEL" required>
                     </div>
                     <div class="mb-3">
-                        <label for="jurusan_id" class="form-label">Jurusan</label>
-                        <select class="form-control" id="jurusan_id" name="jurusan_id[]" required>
-                            @foreach($jurusans as $jurusan)
-                                <option value="{{ $jurusan->id }}">{{ $jurusan->jurusan }}</option>
-                            @endforeach
-                        </select>
+                        <label class="form-label">Konsentrasi Keahlian</label>
+                    
+                        <!-- Checkbox untuk memilih semua -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="checkAll">
+                            <label class="form-check-label" for="checkAll">
+                                Pilih Semua
+                            </label>
+                        </div>
+                    
+                        <!-- Daftar jurusan -->
+                        @foreach($jurusans as $jurusan)
+                            <div class="form-check">
+                                <input class="form-check-input jurusan-checkbox" type="checkbox" name="jurusan_id[]" value="{{ $jurusan->id }}" id="jurusan_{{ $jurusan->id }}">
+                                <label class="form-check-label" for="jurusan_{{ $jurusan->id }}">
+                                    {{ $jurusan->jurusan }}
+                                </label>
+                            </div>
+                        @endforeach
                     </div>
+                                        
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
@@ -29,3 +43,12 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('checkAll').addEventListener('change', function () {
+        let checkboxes = document.querySelectorAll('.jurusan-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+</script>

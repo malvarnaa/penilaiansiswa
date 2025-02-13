@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CpController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LoginController;
@@ -74,8 +75,6 @@ Route::middleware(['auth', 'userAkses:admin'])->group(function () {
     Route::get('/data/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
     Route::get('/kelas/all', [KelasController::class, 'indexAll'])->name('kelas.all');
     Route::post('/kelas/{kelas}', [KelasController::class, 'store'])->name('kelas.store');
-    Route::get('/kelas/{kelas}', [KelasController::class, 'showKelas'])->name('kelas.show');
-    Route::get('/kelas/{kelas}/siswa', [KelasController::class, 'showSiswa'])->name('kelas.siswa');
     Route::get('/get-kelas-mapel/{jurusan_id}', [GuruController::class, 'getKelasMapel']);
     
 
@@ -92,11 +91,15 @@ Route::middleware(['auth', 'userAkses:admin,guru'])->group(function () {
     Route::get('/mata-pelajaran', [MapelController::class, 'index'])->name('mapel.index');
 
     Route::get('/data/kelas', [KelasController::class, 'index'])->name('kelas.index');
+    Route::get('/kelas/{kelas}', [KelasController::class, 'showKelas'])->name('kelas.show');
 
     Route::get('/tujuan/pembelajaran', [TpController::class, 'index'])->name('tp.index');
     Route::post('/tujuan/pembelajaran/store', [TpController::class, 'store'])->name('tp.store');
     Route::get('/download-tp', [TpController::class, 'hasilunduhan'])->name('tp.hasilunduhan');
     Route::get('/tujuan/pembelajaran/download', [TpController::class, 'downloadBlanko'])->name('download.blanko');
+
+    Route::get('/list/file', [AdminController::class, 'listUnduh'])->name('admin.listUnduh');
+
 
     Route::delete('/review/destroy/{id}', [GuruController::class, 'destroyTP'])->name('review.destroy');
 
@@ -104,12 +107,19 @@ Route::middleware(['auth', 'userAkses:admin,guru'])->group(function () {
     Route::get('/upload/template/show/{id}', [AdminController::class, 'show'])->name('admin.show');
 
     Route::get('/data/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+    Route::get('/kelas/{kelas}/siswa', [KelasController::class, 'showSiswa'])->name('kelas.siswa');
+
+    Route::get('/capaian-pembelajaran/{mapel_id}', [CpController::class, 'index'])->name('cp.index');
+    Route::post('/capaian-pembelajaran/store', [CpController::class, 'store'])->name('cp.store');
+
+    Route::post('tujuan-pembelajaran/{cp}', [TpController::class, 'store'])->name('tp.store');
+
+
 });
 
 Route::middleware(['auth', 'userAkses:guru'])->group(function () {
     Route::get('/dashboard/guru', [AdminController::class, 'guruDashboard'])->name('dashboard.guru');
 
-    Route::get('/list/file', [AdminController::class, 'listUnduh'])->name('admin.listUnduh');
     Route::get('/tp/hasilunduhan', [GuruController::class, 'hasilUnduhan'])->name('tp.hasilunduhan');
     Route::post('/tp/upload', [GuruController::class, 'uploadTP'])->name('guru.uploadtp');
 });

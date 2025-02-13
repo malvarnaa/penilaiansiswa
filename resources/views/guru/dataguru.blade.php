@@ -1,6 +1,7 @@
 <x-layout>
+    @section('title', 'Data Guru - GradeFlow')
     <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
-        <h2>{{ $judul }}</h2>
+        <h2>{{ $title }}</h2>
         <a href="{{ route('admin.dataMaster') }}" class="btn btn-secondary">Kembali</a>
     </div>  
 
@@ -32,7 +33,7 @@
                 <tbody style="text-align: center">
                     @if ($gurus->isEmpty())
                     <tr>
-                        <td colspan="4">Tidak ada data yang harus ditampilkan.</td> <!-- Sesuaikan colspan -->
+                        <td colspan="6">Tidak ada data yang harus ditampilkan.</td> 
                     </tr>
                     @endif
                     @foreach ($gurus as $no => $data)
@@ -44,7 +45,7 @@
                             @if($data->kelas && $data->kelas->count() > 0)
                                 @foreach($data->kelas as $index => $kelas)
                                     {{ $kelas->kelas }} {{ $kelas->kode_jurusan }} {{ $kelas->no_jrs }}
-                                    @if($index < $data->kelas->count() - 1) <!-- Add comma except for the last item -->
+                                    @if($index < $data->kelas->count() - 1) 
                                         ,
                                     @endif
                                 @endforeach

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jurusan;
 use App\Models\Kelas;
+use App\Models\Mapel;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
@@ -62,18 +63,83 @@ class KelasController extends Controller
         return view('kelas.create', compact('jurusans'));
     }
 
-    public function showKelas($kelas)
-    {
-        $kelasData = Kelas::where('kelas', $kelas)->with('jurusan')->get();
+    public function showKelas($identifier)
+{
+    $user = auth()->user();
+
+    // Cek apakah parameter adalah angka (mapel_id) atau nama kelas
+    if (is_numeric($identifier)) {
+        // Jika identifier berupa angka, anggap sebagai mapel_id
+        $mapel_id = $identifier;
+
+        if ($user->role === 'admin') {
+            // Admin melihat semua kelas yang memiliki mapel tersebut
+            $kelasData = Kelas::whereHas('guruMapel', function ($query) use ($mapel_id) {
+                $query->where('mapel_id', $mapel_id);
+            })->with('jurusan', 'siswa')->get();
+
+            $jurusans = Jurusan::all();
+        } else {
+            // Guru hanya melihat kelas yang dia ajar berdasarkan mapel
+            $kelasData = Kelas::whereHas('guruMapel', function ($query) use ($user, $mapel_id) {
+                $query->where('guru_id', $user->guru->id)
+                      ->where('mapel_id', $mapel_id);
+            })->with('jurusan', 'siswa')->get();
+
+            $jurusans = [];
+        }
+
+        // Ambil nama mata pelajaran berdasarkan ID
+        $kelas = Mapel::find($mapel_id)->mapel ?? 'Tidak Ditemukan';
+
+        return view('kelas.showkelas', compact('kelasData', 'mapel_id', 'jurusans', 'kelas'));
+    } else {
+        // Jika identifier bukan angka, anggap sebagai nama kelas
+        $kelas = $identifier;
+        $kelasData = Kelas::where('kelas', $kelas)->with('jurusan', 'siswa')->get();
         $jurusans = Jurusan::all();
-        return view('kelas.showkelas', compact('kelas', 'kelasData', 'jurusans'));
+
+        return view('kelas.showkelas', compact('kelasData', 'jurusans', 'kelas')); // Hapus $mapel_id karena tidak diperlukan
     }
+}
+
+    
+    
+
+
+
+    // public function showKelas($mapel_id)
+    // {
+    //     $user = auth()->user();
+    
+    //     if ($user->role === 'admin') {
+    //         // Admin bisa melihat semua kelas yang memiliki mapel tersebut
+    //         $kelasData = Kelas::whereHas('guruMapel', function ($query) use ($mapel_id) {
+    //             $query->where('mapel_id', $mapel_id);
+    //         })->with('jurusan')->get();
+    //     } else {
+    //         // Guru hanya melihat kelas yang dia ajar sesuai mapel yang dia ajarkan
+    //         $kelasData = Kelas::whereHas('guruMapel', function ($query) use ($user, $mapel_id) {
+    //             $query->where('guru_id', $user->guru->id)
+    //                   ->where('mapel_id', $mapel_id);
+    //         })->with('jurusan')->get();
+    //     }
+    
+    //     return view('kelas.showkelas', compact('kelasData', 'mapel_id'));
+    // }
+    
+    
+
+
+    
 
     public function showSiswa($kelas)
-    {
-        $kelasData = Kelas::findOrFail($kelas);    
-        $siswaData = Siswa::where('kelas_id', $kelasData->id)->get(); // Pastikan menggunakan kelas_id
-    
-        return view('kelas.showSiswa', compact('kelasData', 'siswaData'));
+    { 
+        $kelasData = Kelas::findOrFail($kelas);
+        $siswaData = Siswa::where('kelas_id', $kelasData->id)->get();
+        
+        $jurusanData = Jurusan::findOrFail($kelasData->jurusan_id);    
+        return view('kelas.showSiswa', compact('kelasData', 'siswaData', 'jurusanData'));
     }
+    
 }

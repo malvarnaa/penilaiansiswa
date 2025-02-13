@@ -9,12 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('tp', function (Blueprint $table) {
+        Schema::create('nilai', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cp_id')->constrained('cp')->onDelete('cascade');
-            $table->string('nama_tp');
+            $table->foreignId('tp_id')->constrained('tp')->onDelete('cascade');
+            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
+            $table->integer('nilai');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tp');
+        Schema::dropIfExists('nilai');
     }
 };

@@ -89,11 +89,9 @@
             <img src="assets/img/hero-img.png" class="img-fluid animated" alt="">
           </div>
           <div class="col-lg-6  d-flex flex-column justify-content-center text-center text-md-start" data-aos="fade-in">
-            <h2>App landing page template</h2>
-            <p>We are team of talented designers making websites with Bootstrap</p>
+            <h2>Apa itu GradeFlow?</h2>
+            <p>Platform digital untuk memantau dan mengelola nilai akademik siswa dengan mudah.</p>
             <div class="d-flex mt-4 justify-content-center justify-content-md-start">
-              <a href="#" class="download-btn"><i class="bi bi-google-play"></i> <span>Google Play</span></a>
-              <a href="#" class="download-btn"><i class="bi bi-apple"></i> <span>App Store</span></a>
             </div>
           </div>
         </div>
@@ -106,7 +104,7 @@
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Tentang ScorePlus</h2>
+        <h2>Tentang GradeFlow</h2>
         <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
       </div><!-- End Section Title -->
 
@@ -125,32 +123,32 @@
               <div class="col-md-6 icon-box">
                 <i class="bi bi-award"></i>
                 <div>
-                  <h4>Corporis voluptates sit</h4>
-                  <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut aliquip</p>
+                  <h4>Sistem Penilaian Digital</h4>
+                  <p>Memudahkan guru dalam mencatat, menghitung, dan mengelola nilai siswa secara otomatis dan akurat.</p>
                 </div>
               </div><!-- End Feature Item -->
 
               <div class="col-md-6 icon-box">
                 <i class="bi bi-card-checklist"></i>
                 <div>
-                  <h4>Ullamco laboris nisi</h4>
-                  <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt</p>
+                  <h4>Laporan Akademik Real-Time</h4>
+                  <p>Siswa dapat mengakses perkembangan nilai secara transparan kapan saja dan di mana saja.</p>
                 </div>
               </div><!-- End Feature Item -->
 
               <div class="col-md-6 icon-box">
                 <i class="bi bi-dribbble"></i>
                 <div>
-                  <h4>Labore consequatur</h4>
-                  <p>Aut suscipit aut cum nemo deleniti aut omnis. Doloribus ut maiores omnis facere</p>
+                  <h4>Manajemen Data Siswa</h4>
+                  <p>Menyimpan riwayat nilai dan pencapaian siswa dengan aman dalam satu sistem terpadu.</p>
                 </div>
               </div><!-- End Feature Item -->
 
               <div class="col-md-6 icon-box">
                 <i class="bi bi-filter-circle"></i>
                 <div>
-                  <h4>Beatae veritatis</h4>
-                  <p>Expedita veritatis consequuntur nihil tempore laudantium vitae denat pacta</p>
+                  <h4>Otomatisasi Penilaian</h4>
+                  <p>Mempermudah guru dalam mengelola dan menghitung nilai siswa dengan sistem yang efisien dan akurat.</p>
                 </div>
               </div><!-- End Feature Item -->
 

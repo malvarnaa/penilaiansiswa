@@ -10,13 +10,13 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="jurusan" class="form-label">Program Keahlian</label>
-                        <input type="text" class="form-control" id="jurusan" name="jurusan" required>
+                        <input type="text" class="form-control" id="jurusan" name="jurusan" placeholder="KETIK PROGRAM KEAHLIAN" required>
                     </div>
                     
                     <div id="kode_jurusan_container" class="mb-3">
                         <label for="kode_jurusan" class="form-label">Konsentrasi Keahlian</label>
                         <div class="input-group mb-2">
-                            <input type="text" class="form-control kode_jurusan" name="kode_jurusan[]" data-role="tagsinput" placeholder="PPLG, GIM, DKV" required>
+                            <input type="text" class="form-control kode_jurusan" name="kode_jurusan[]" data-role="tagsinput" placeholder="PPLG, GIM" required>
                             <button type="button" class="btn btn-outline-secondary add-input-btn">+</button>
                         </div>
                     </div>

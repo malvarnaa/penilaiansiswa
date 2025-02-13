@@ -1,6 +1,5 @@
 <x-layout>
 
-
-
-
+    
+    
 </x-layout>

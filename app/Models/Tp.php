@@ -10,8 +10,15 @@ class Tp extends Model
     use HasFactory;
 
     protected $table = 'tp';
-    protected $fillable = [
-        'no_tp',
-        'nama_tp',
-    ];
+    protected $fillable = ['cp_id', 'nama_tp'];
+
+    public function cp()
+    {
+        return $this->belongsTo(Cp::class);
+    }
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class);
+    }
 }

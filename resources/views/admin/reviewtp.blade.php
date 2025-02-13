@@ -1,4 +1,5 @@
 <x-layout>
+    @section('title', 'Review Tujuan Pembelajaran - GradeFlow')
     <h2 class="mt-4 mb-4">{{ $judul }}</h2>
 
     <div class="card shadow-sm p-4">

@@ -14,19 +14,25 @@ use Illuminate\Support\Facades\Storage;
 class AdminController extends Controller
 {
     public function adminDashboard() {
-        $title = 'Selamat Datang, ';
+        $title = 'GradeFlow';
+        $welcome = 'Selamat Datang, ';
         $totalGuru = Guru::count();
         $totalMapel = Mapel::count();
         $totalKelas = Kelas::count();
         $user = Auth::user();
 
-        $pengguna = Auth::user();  // Mengambil data guru terkait dengan user yang login
+        $pengguna = Guru::where('user_id', $user->id)
+            ->with(['kelas', 'mapel', 'jurusan']) // Pastikan semua relasi dimuat
+            ->first();
 
-        return view('page.dashboard', compact('title', 'user', 'totalGuru', 'totalMapel', 'totalKelas', 'pengguna'));
+        $latestUpload = UploadAdmin::whereMonth('created_at', now()->month)->latest()->first();
+
+
+        return view('page.dashboard', compact('welcome', 'user', 'totalGuru', 'totalMapel', 'totalKelas', 'pengguna', 'latestUpload', 'title'));
     }
     
     public function guruDashboard() {
-        $title = 'Selamat Datang, ';
+        $welcome = 'Selamat Datang, ';
         $totalGuru = Guru::count();
         $totalMapel = Mapel::count();
         $totalKelas = Kelas::count();
@@ -34,16 +40,19 @@ class AdminController extends Controller
 
         $pengguna = Auth::user();  // Mengambil data guru terkait dengan user yang login
 
-        return view('page.dashboard', compact('title', 'guru', 'totalMapel', 'totalGuru', 'totalKelas', 'pengguna'));
+        $latestUpload = UploadAdmin::whereMonth('created_at', now()->month)->latest()->first();
+
+
+        return view('page.dashboard', compact('welcome', 'guru', 'totalMapel', 'totalGuru', 'totalKelas', 'pengguna', 'latestUpload'));
     }
     
 
     public function siswaDashboard() {
-        $title = 'Selamat Datang, ';
+        $welcome = 'Selamat Datang, ';
 
         $pengguna = Auth::user();  // Mengambil data guru terkait dengan user yang login
 
-        return view('page.dashboard', compact('title', 'pengguna'));
+        return view('page.dashboard', compact('welcome', 'pengguna'));
     }
 
     public function landing() {

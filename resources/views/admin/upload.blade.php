@@ -1,8 +1,9 @@
 <x-layout>
+    @section('title', 'Upload Tujuan Pembelajaran - GradeFlow')
     <div class="container mt-3">
         <div class="row">
             <div class="">
-                <h2 class="mb-4">{{ $judul }}</h2>
+                <h2 class="mb-4">Upload Tujuan Pembelajaran</h2>
 
                 {{-- Form Upload PDF --}}
                 <div class="card shadow-sm p-4" style="width: 100%">

@@ -1,12 +1,14 @@
 <x-layout>
+    @section('title', 'Download Blanko Dokumen - GradeFlow')
+
     <div class="container">
-        <h2 class="mb-3 mt-2">Unduh Tujuan Pembelajaran</h2>
+        <h2 class="mb-3 mt-2">Downlaod Blanko Dokumen</h2>
 
         <!-- Section Download Blanko -->
         <div class="text-center mb-3">
             <div class="card shadow-sm">
                 <div class="card-body py-4">
-                    <h4 class="mb-3" style="font-size: 1rem;">Download Tujuan Pembelajaran</h4>
+                    <h4 class="mb-3" style="font-size: 1rem;">Download Blanko Dokumen</h4>
                     <p class="text-muted mb-4" style="font-size: 0.75rem;">Klik tombol di bawah untuk melihat daftar file tujuan pembelajaran yang telah disiapkan oleh admin.</p>
                     <a href="{{ route('admin.listUnduh') }}" class="btn btn-lg text-white w-100" style="background-color: #435ebe; font-size: 0.75rem;">
                         Lebih Detail <i class="bi bi-arrow-right-short"></i>

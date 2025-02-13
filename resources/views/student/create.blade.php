@@ -3,6 +3,8 @@
         <form method="POST" action="{{ route('student.store') }}">
             @csrf
             <input type="hidden" name="kelas_id" value="{{ $kelasData->id }}">
+            <input type="hidden" name="jurusan_id" value="{{ $jurusanData->id }}">
+
         
             <div class="modal-content">
                 <div class="modal-header">

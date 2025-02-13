@@ -29,4 +29,12 @@ class Mapel extends Model
     {
         return $this->belongsTo(Jurusan::class);
     }
+    public function guruMapel()
+    {
+        return $this->hasMany(GuruMapel::class, 'mapel_id', 'id');
+    }
+
+    public function cp() {
+        return $this->hasMany(Cp::class);
+    }
 }

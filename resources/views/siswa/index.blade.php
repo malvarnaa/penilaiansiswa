@@ -1,6 +1,6 @@
 <x-layout>
 
-    <h2 class="mt-4">{{ $judul }}</h2>
+    <h2 class="mt-4">{{ $title }}</h2>
 
     <div class="card mt-4">
         <div class="card-body">

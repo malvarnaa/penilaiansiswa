@@ -22,25 +22,41 @@ class TpController extends Controller
         return view('tp.hasilunduhan', compact('judul', 'uploads'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request, $cp_id)
+    {
         $request->validate([
-            'nama_tp' => 'required|string|max:255',
+            'nama_tp.*' => 'required|string|max:255',
         ]);
 
-        $akhirTp = Tp::latest()->first(); // Ambil data terakhir berdasarkan ID
-        $kode = $akhirTp ? intval(substr($akhirTp->no_tp, 3)) + 1 : 1;
-    
-        // Format nomor menjadi 'TP 01', 'TP 02', dst.
-        $noTp = 'TP ' . str_pad($kode, 2, '0', STR_PAD_LEFT);
-    
-        // Simpan data ke database
-        Tp::create([
-            'no_tp' => $noTp,
-            'nama_tp' => $request->nama_tp,
-        ]);
+        foreach ($request->nama_tp as $nama_tp) {
+            Tp::create([
+                'cp_id' => $cp_id,
+                'nama_tp' => $nama_tp,
+            ]);
+        }
 
-        return redirect()->back()->with('Tujuan Pembelajaran berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Tujuan Pembelajaran berhasil ditambahkan.');
     }
+
+    // public function store(Request $request) {
+    //     $request->validate([
+    //         'nama_tp' => 'required|string|max:255',
+    //     ]);
+
+    //     $akhirTp = Tp::latest()->first(); // Ambil data terakhir berdasarkan ID
+    //     $kode = $akhirTp ? intval(substr($akhirTp->no_tp, 3)) + 1 : 1;
+    
+    //     // Format nomor menjadi 'TP 01', 'TP 02', dst.
+    //     $noTp = 'TP ' . str_pad($kode, 2, '0', STR_PAD_LEFT);
+    
+    //     // Simpan data ke database
+    //     Tp::create([
+    //         'no_tp' => $noTp,
+    //         'nama_tp' => $request->nama_tp,
+    //     ]);
+
+    //     return redirect()->back()->with('Tujuan Pembelajaran berhasil ditambahkan.');
+    // }
 
     public function downloadBlanko()
     {

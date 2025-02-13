@@ -28,13 +28,23 @@ class Guru extends Model
                 ->withPivot('jurusan_id', 'kelas_id')
                 ->withTimestamps();
         }
-        public function kelas()
-        {
-            return $this->belongsToMany(Kelas::class, 'guru_mapel', 'guru_id', 'kelas_id');
-        }
-
         public function jurusan()
         {
-            return $this->belongsToMany(Jurusan::class, 'guru_mapel');
+            return $this->belongsToMany(Jurusan::class, 'guru_mapel', 'guru_id', 'jurusan_id')
+                ->withPivot('mapel_id', 'kelas_id')
+                ->withTimestamps();
+        }
+    
+        // Relasi Many-to-Many dengan Kelas melalui guru_mapel
+        public function kelas()
+        {
+            return $this->belongsToMany(Kelas::class, 'guru_mapel', 'guru_id', 'kelas_id')
+                ->withPivot('mapel_id', 'jurusan_id')
+                ->withTimestamps();
+        }
+
+        public function guruMapel()
+        {
+            return $this->hasMany(GuruMapel::class, 'guru_id');
         }
 }

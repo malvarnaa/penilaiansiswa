@@ -1,8 +1,9 @@
 <x-layout>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+    @section('title', 'GradeFlow')
 
-    <h2 class="mt-4 mb-4">{{ $title }} {{ Auth::user()->name }}!</h2>
+    <h2 class="mt-4 mb-4">{{ $welcome }} {{ Auth::user()->name }}!</h2>
     
 
     {{-- <div class="container mt-5">
@@ -67,7 +68,7 @@
                         <td style="padding-right: 10px;">Mengajar di Kelas</td>
                         <td> : </td>
                         <td>
-                            @if($pengguna->kelas && $pengguna->kelas->isNotEmpty())
+                            @if($pengguna && $pengguna->kelas && $pengguna->kelas->isNotEmpty())
                                 {{ $pengguna->kelas->pluck('kelas')->join(', ') }}
                             @else
                                 Tidak ada kelas yang diajar
@@ -78,17 +79,59 @@
                         <td style="padding-right: 10px;">Mengajar Mata Pelajaran</td>
                         <td> : </td>
                         <td>
-                            @if($pengguna->mapel && $pengguna->mapel->isNotEmpty())
+                            @if($pengguna && $pengguna->mapel && $pengguna->mapel->isNotEmpty())
                                 {{ $pengguna->mapel->pluck('mapel')->join(', ') }}
                             @else
                                 Tidak ada mata pelajaran yang diajar
                             @endif
                         </td>
-                    </tr>     
+                    </tr>                       
                     @endif               
-                </table>
+                </table>                
             </div>
         </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+            <h5>File Terbaru yang Di-upload</h5>
+        </div>
+    
+        <div class="card shadow-sm ">
+            <div class="card-body text-center">
+                @if ($latestUpload)
+                    <h5 class="card-title mb-3"><strong>{{ $latestUpload->file_name }}</strong></h5>
+                    <p class="text-muted mb-4">{{ $latestUpload->user->name }} - {{ $latestUpload->created_at->format('d M Y') }}</p>
+        
+                    <div class="d-flex justify-content-center mb-4">
+                        <!-- Preview Icon for PDF -->
+                        @if (in_array(pathinfo($latestUpload->file_name, PATHINFO_EXTENSION), ['pdf']))
+                            <a href="{{ asset('storage/' . $latestUpload->file_path) }}" target="_blank" class="me-4">
+                                <i class="bi bi-file-earmark-pdf" style="font-size: 60px; color: #f44336;"></i>
+                            </a>
+                        @else
+                            <i class="bi bi-file-earmark" style="font-size: 60px; color: #2196F3;"></i>
+                        @endif
+                    </div>
+        
+                    <div class="d-flex justify-content-center gap-3">
+                        <!-- Tombol untuk mengunduh (hanya ikon) -->
+                        <a href="{{ asset('storage/' . $latestUpload->file_path) }}" class="btn btn-primary btn-sm shadow-sm" download="{{ $latestUpload->file_name }}">
+                            <i class="bi bi-download" style="font-size: 18px;"></i> <span class="d-none d-sm-inline">Unduh</span>
+                        </a>
+                        
+                        <!-- Tombol untuk melihat semua file (hanya ikon) -->
+                        <a href="{{ route('admin.listUnduh') }}" class="btn btn-secondary btn-sm shadow-sm">
+                            <i class="bi bi-folder" style="font-size: 18px;"></i> <span class="d-none d-sm-inline">Lihat Semua</span>
+                        </a>
+                    </div>
+                    
+                @else
+                    <p class="text-muted">Tidak ada file yang di-upload.</p>
+                @endif
+            </div>
+        </div>
+                
+        
+                        
                 
 
         {{-- @endif --}}

@@ -1,4 +1,6 @@
 <x-layout>
+    @section('title', 'Rekap File - GradeFlow')
+
 
     <div class="">
         <div class="d-flex justify-content-between align-items-center mt-4 mb-4">

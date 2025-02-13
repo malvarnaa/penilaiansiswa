@@ -1,6 +1,9 @@
 <x-layout>
 
-    <h2>Daftar Guru untuk Mapel: {{ $mapel->mapel }}</h2>
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <h2>Daftar Guru untuk Mapel: {{ $mapel->mapel }}</h2>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary">Kembali</a>
+    </div>  
 
     @if($jurusanId)
     @php
@@ -13,19 +16,24 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th>NIP/NUPTK</th>
                 <th>Nama Guru</th>
                 <th>Kelas</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($gurus as $index => $guru)
+            @foreach($gurus as $guru)
             <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $guru->nomor }}</td>
                 <td>{{ $guru->nama }}</td>
                 <td>
-                    @foreach($guru->kelas as $kelas)
-                        {{ $kelas->nama }}@if(!$loop->last), @endif
-                    @endforeach
+                    @foreach($guru->kelas as $index => $kelas)
+                    {{ $kelas->kelas }} {{ $kelas->kode_jurusan }} {{ $kelas->no_jrs }}
+                    @if($index < $guru->kelas->count() - 1) 
+                        ,
+                    @endif
+                @endforeach
                 </td>
             </tr>
             @endforeach

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jurusan;
+use App\Models\Guru;
+use App\Models\GuruMapel;
 use App\Models\Mapel;
 use Illuminate\Http\Request;
 
@@ -10,23 +12,32 @@ class MapelController extends Controller
 {
     public function index(Request $request)
     {
-    $jurusanId = $request->jurusan_id;
-
-    // Ambil semua jurusan untuk dropdown filter
-    $jurusans = Jurusan::all();
-
-    // Filter dan kelompokkan mata pelajaran berdasarkan jurusan
-    $mapel = Mapel::when($jurusanId, function ($query) use ($jurusanId) {
-        return $query->where('jurusan_id', $jurusanId);
-    })
-    ->with(['jurusan', 'guru.kelas']) // Include relasi jurusan, guru, dan kelas
-    ->get()
-    ->groupBy('mapel'); // Kelompokkan berdasarkan nama mapel
-
-    $judul = 'Mata Pelajaran';
-
-    return view('mapel.index', compact('mapel', 'jurusans', 'jurusanId', 'judul'));
+        $user = auth()->user();
+        $jurusanId = $request->jurusan_id;
+    
+        // Ambil semua jurusan untuk dropdown filter
+        $jurusans = Jurusan::all();
+    
+        if ($user->role == 'admin') {
+            // Jika admin, tampilkan semua mata pelajaran
+            $mapel = Mapel::when($jurusanId, function ($query) use ($jurusanId) {
+                return $query->where('jurusan_id', $jurusanId);
+            })->with('jurusan')->get()->groupBy('mapel'); // Pastikan pakai field yang benar
+        } else {
+            // Jika guru, hanya ambil mata pelajaran yang dia ajar
+            $mapel = Mapel::whereHas('guruMapel', function ($query) use ($user, $jurusanId) {
+                $query->where('guru_id', $user->guru->id);
+                if ($jurusanId) {
+                    $query->where('jurusan_id', $jurusanId);
+                }
+            })->with(['guruMapel.kelas', 'jurusan'])->get();
+        }
+    
+        return view('mapel.index', compact('mapel', 'jurusans', 'jurusanId'));
     }
+    
+
+    
 
 
     public function create()
@@ -132,24 +143,24 @@ class MapelController extends Controller
         return view('jurusan.edit', compact('jurusan'));
     }
 
-    public function jurusanUpdate(Request $request, Jurusan $jurusan)
-    {
-        $request->validate([
-            'jurusan' => 'required|string|max:255',
-            'kode_jurusan' => 'nullable|array', 
-            'kode_jurusan.*' => 'nullable|string|max:255', 
-        ]);
+    public function jurusanUpdate(Request $request, $id)
+{
+    $request->validate([
+        'jurusan' => 'required|string|max:255',
+        'kode_jurusan' => 'nullable|array', // Validasi untuk menerima array kode_jurusan
+        'kode_jurusan.*' => 'nullable|string|max:255', // Validasi tiap item dalam array
+    ]);
 
-        // Menggabungkan kode_jurusan menjadi satu string dengan koma jika ada
-        $kodeJurusan = $request->kode_jurusan ? implode(',', array_map('trim', $request->kode_jurusan)) : null;
+    $kodeJurusan = $request->kode_jurusan ? implode(',', array_map('trim', $request->kode_jurusan)) : null;
 
-        $jurusan->update([
-            'jurusan' => $request->jurusan,
-            'kode_jurusan' => $kodeJurusan, // Simpan kode jurusan dalam format string dengan koma
-        ]);
+    $jurusan = Jurusan::findOrFail($id);
+    $jurusan->update([
+        'jurusan' => $request->jurusan,
+        'kode_jurusan' => $kodeJurusan,
+    ]);
 
-        return redirect()->back()->with('success', 'Jurusan berhasil diperbarui.');
-    }
+    return redirect()->back()->with('success', 'Jurusan berhasil diperbarui.');
+}
 
 
     public function jurusanDestroy($id) {

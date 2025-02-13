@@ -5,8 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Dashboard</title>
-    
+    <title>@yield('title', 'Default Title')</title>    
     <link rel="icon" type="image/png" href="https://1.bp.blogspot.com/-fhQrt5qoZVQ/Vk7JRkLvD4I/AAAAAAAAF-k/ePg_jf3sDwI/s1600/Smk-Negeri-1-Kawali-Logo.png">
     
     <!-- Google Font: Nunito -->
@@ -80,6 +79,7 @@
         <x-sidebar></x-sidebar>
 
         <div class="content">
+            <x-header>{{ $title ?? 'Default Title' }}</x-header>            
             {{ $slot }}
         </div>
 

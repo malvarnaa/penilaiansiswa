@@ -69,55 +69,22 @@
                     <span>Data Master</span>
                 </a>
             </li>
-            {{-- <li class="sidebar-item has-sub">
-                <a href="#" class="sidebar-link">
-                    <i class="bi bi-folder"></i>
-                    <span>Data Master</span>
-                </a>
-                <ul class="submenu" style="display: none;">
-                    <li class="submenu-item">
-                        <a href="/data/guru" style="text-decoration: none">
-                            <i class="bi bi-person"></i> Data Guru
-                        </a>
-                    </li>
-                    <li class="submenu-item">
-                        <a href="/data/kelas" style="text-decoration: none">
-                            <i class="bi bi-building"></i> Data Kelas
-                        </a>
-                    </li>
-                </ul>
-            </li>  
-            <li class="sidebar-item">
-                <a href="/mata-pelajaran" class='sidebar-link'>
-                    <i class="bi bi-credit-card"></i>
-                    <span>Mata Pelajaran</span>
-                </a>
-            </li> --}}
             @endif
 
             @if(auth()->user()->role == 'guru')
             <li class="sidebar-item">
-                <a href="/data/kelas" class='sidebar-link'>
-                    <i class="bi bi-building"></i>
-                    <span>Data Kelas</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
                 <a href="/mata-pelajaran" class='sidebar-link'>
                     <i class="bi bi-credit-card"></i>
                     <span>Mata Pelajaran</span>
                 </a>
             </li>
-            @endif
-{{-- 
-            @if(auth()->user()->role == 'guru')
-            <li class="sidebar-item">
-                <a href="/tujuan/pembelajaran" class='sidebar-link'>
-                    <i class="bi bi-person-check"></i>
+            {{-- <li class="sidebar-item">
+                <a href="{{ route('kelas.show', ['kelas']) }}" class='sidebar-link'>
+                    <i class="bi bi-building"></i>
                     <span>Tujuan Pembelajaran</span>
                 </a>
-            </li>
-            @endif --}}
+            </li> --}}
+            @endif
 
             @if(auth()->user()->role == 'admin') 
             <li class="sidebar-item">

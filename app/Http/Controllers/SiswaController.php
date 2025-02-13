@@ -6,6 +6,7 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 
 class SiswaController extends Controller
@@ -15,7 +16,7 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        $judul = 'Data Siswa';
+        $title = 'Data Siswa';
         $kelas = Kelas::all();
         $datasiswa = Siswa::with('kelas')->get();
         return view('siswa.index', compact('datasiswa', 'kelas', 'judul'));
@@ -34,7 +35,7 @@ class SiswaController extends Controller
             'nama' => 'required',
             'jk' => 'required|in:Laki-laki,Perempuan',
             'kelas_id' => 'required|exists:kelas,id',
-            'jurusan_id' => 'required|exists:jurusans,id',
+            'jurusan_id' => 'required|exists:jurusan,id',
         ], [
             'nis.unique' => 'NIS sudah digunakan oleh siswa lain.',
         ]);
@@ -57,7 +58,7 @@ class SiswaController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return redirect()->back()->with('success', 'Data siswa berhasil ditambahkan.');
+        return redirect()->route('kelas.siswa', $request->kelas_id)->with('success', 'Data siswa berhasil ditambahkan.');
     }
 
 
@@ -69,43 +70,58 @@ class SiswaController extends Controller
         return view('siswa.edit', compact('siswa', 'kelas'));
     }
 
-    public function update(Request $request, Siswa $siswa)
-    {
-        $request->validate([
-            'nis' => 'required|unique:siswas,nis,' . $siswa->id . '|unique:users,username,' . $siswa->user_id,
-            'nama' => 'required',
-            'jk' => 'required|in:Laki-laki,Perempuan',
-        ], [
-            'nis.unique' => 'NIS sudah digunakan oleh siswa lain.',
-        ]);
+    public function update(Request $request, $id)
+{
+    $siswa = Siswa::findOrFail($id);
 
-        // Update data siswa
-        $siswa->update([
-            'nis' => $request->nis,
-            'nama' => $request->nama,
-            'jk' => $request->jk,
-        ]);
+    $request->validate([
+        'nis' => [
+            'required',
+            Rule::unique('siswas', 'nis')->ignore($siswa->id), // Abaikan validasi jika NIS tidak berubah
+            Rule::unique('users', 'username')->ignore($siswa->user_id), // Pastikan username user juga diabaikan jika tidak berubah
+        ],
+        'nama' => 'required',
+        'jk' => 'required|in:Laki-laki,Perempuan',
+        'kelas_id' => 'required|exists:kelas,id',
+        'jurusan_id' => 'required|exists:jurusan,id',
+    ], [
+        'nis.unique' => 'NIS sudah digunakan oleh siswa lain.',
+    ]);
 
-        // Update akun user agar username tetap sesuai dengan NIS
-        $siswa->user->update([
-            'name' => $request->nama,
-            'username' => $request->nis, // Pastikan username tetap sesuai nis
-        ]);
-
-        return redirect()->back()->with('success', 'Data siswa berhasil diperbarui.');
+    // Update user account jika NIS berubah
+    $user = User::findOrFail($siswa->user_id);
+    if ($user->username !== $request->nis) {
+        $user->update(['username' => $request->nis]);
     }
 
+    // Update siswa
+    $siswa->update([
+        'nis' => $request->nis,
+        'nama' => $request->nama,
+        'jk' => $request->jk,
+        'kelas_id' => $request->kelas_id,
+        'jurusan_id' => $request->jurusan_id,
+    ]);
+
+    return redirect()->route('kelas.siswa', $request->kelas_id)->with('success', 'Data siswa berhasil diperbarui.');
+}
 
 
-    public function destroy(Siswa $siswa, $id)
+
+
+
+    public function destroy(Siswa $siswa)
     {
+        if (!$siswa) {
+            return redirect()->back()->with('error', 'Data siswa tidak ditemukan.');
+        }
 
-        $siswa = Siswa::findOrFail($id);
-
-        User::destroy($siswa->user_id);
+        if ($siswa->user) {
+            $siswa->user->delete();
+        }
 
         $siswa->delete();
-
-        return redirect()->back()->with('success', 'Data Siswa berhasil dihapus.');
+        return redirect()->back()->with('success', 'Data siswa berhasil dihapus.');
     }
+
 }

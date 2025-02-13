@@ -17,7 +17,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="jurusan" class="form-label">Jurusan</label>
+                        <label for="jurusan" class="form-label">Program Keahlian</label>
                         <select class="form-select" id="jurusan" name="jurusan" required>
                             <option value="TKRO">TKRO</option>
                             <option value="TJKT">TJKT</option>
@@ -25,7 +25,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="no" class="form-label">No</label>
+                        <label for="no" class="form-label">No Program Keahlian</label>
                         <select class="form-select" id="no" name="no" required>
                             <option value="1">1</option>
                             <option value="2">2</option>
