@@ -31,9 +31,9 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nis' => 'required|unique:siswas,nis|unique:users,username',
-            'nama' => 'required',
-            'jk' => 'required|in:Laki-laki,Perempuan',
+            'nis.*' => 'required|unique:siswas,nis|unique:users,username',
+            'nama.*' => 'required',
+            'jk.*' => 'required|in:Laki-laki,Perempuan',
             'kelas_id' => 'required|exists:kelas,id',
             'jurusan_id' => 'required|exists:jurusan,id',
         ], [
@@ -59,7 +59,9 @@ class SiswaController extends Controller
         ]);
 
         return redirect()->route('kelas.siswa', $request->kelas_id)->with('success', 'Data siswa berhasil ditambahkan.');
+
     }
+    
 
 
 
@@ -108,8 +110,6 @@ class SiswaController extends Controller
 
 
 
-
-
     public function destroy(Siswa $siswa)
     {
         if (!$siswa) {
@@ -123,5 +123,4 @@ class SiswaController extends Controller
         $siswa->delete();
         return redirect()->back()->with('success', 'Data siswa berhasil dihapus.');
     }
-
 }

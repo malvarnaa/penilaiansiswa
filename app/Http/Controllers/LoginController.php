@@ -8,13 +8,20 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan halaman login, tetapi jika sudah login, redirect ke dashboard sesuai role.
      */
     public function index()
     {
-        return view('page.login');
+        if (Auth::check()) {
+            return $this->redirectToDashboard(Auth::user()->role);
+        }
+
+        return view('page.login'); // Jika belum login, tampilkan halaman login
     }
 
+    /**
+     * Proses login
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -24,27 +31,44 @@ class LoginController extends Controller
             'username.required' => 'Username wajib diisi',
             'password.required' => 'Password wajib diisi',
         ]);
-    
-        $infologin = [
-            'username' => $request->username,
-            'password' => $request->password,
-        ];
-    
-        if (Auth::attempt($infologin)) {
-            if (Auth::user()->role === 'admin') {
-                return redirect()->route('dashboard.admin');
-            } elseif (Auth::user()->role === 'guru') {
-                return redirect()->route('dashboard.guru');
-            } elseif (Auth::user()->role === 'siswa') {
-                return redirect()->route('dashboard.siswa');
-            }
-        } else {
-            return redirect()->back()->withErrors('Username dan password yang dimasukkan tidak sesuai')->withInput();
-        }
+
+        $credentials = $request->only('username', 'password');
+
+        if (Auth::attempt($credentials)) {
+            return $this->redirectToDashboard(Auth::user()->role);
+        } 
+        
+        return redirect()->back()
+            ->withErrors(['login' => 'Username dan password yang dimasukkan tidak sesuai'])
+            ->withInput();
     }
 
-    public function logout() {
+    /**
+     * Proses logout
+     */
+    public function logout()
+    {
         Auth::logout();
-        return redirect()->route('page.login'); // or use the route you want to redirect to
+        session()->invalidate(); // Menghapus session
+        session()->regenerateToken(); // Regenerasi token untuk keamanan
+
+        return redirect()->route('page.login'); // Redirect ke halaman login setelah logout
+    }
+
+    /**
+     * Redirect ke dashboard berdasarkan role pengguna
+     */
+    private function redirectToDashboard($role)
+    {
+        switch ($role) {
+            case 'admin':
+                return redirect()->route('dashboard.admin');
+            case 'guru':
+                return redirect()->route('dashboard.guru');
+            case 'siswa':
+                return redirect()->route('dashboard.siswa');
+            default:
+                return redirect()->route('page.login'); // Jaga-jaga jika role tidak dikenal
+        }
     }
 }

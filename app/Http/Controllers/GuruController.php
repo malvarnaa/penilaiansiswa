@@ -163,38 +163,50 @@ class GuruController extends Controller
     }
     
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'nomor' => 'required|string|unique:gurus,nomor,' . $id,
-            'jk' => 'required|string|max:100',
-            'jurusan_id' => 'required|array',
-            'jurusan_id.*' => 'exists:jurusan,id',
-            'kelas_id' => 'required|array',
-            'kelas_id.*' => 'exists:kelas,id',
-            'mapel_id' => 'required|array',
-            'mapel_id.*' => 'exists:mapels,id',
-        ]);
+{
+    // Validasi Input
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'nomor' => 'required|string|unique:gurus,nomor,' . $id,
+        'jk' => 'required|string|max:100',
 
-        $guru = Guru::findOrFail($id);
-        $guru->update([
-            'nama' => $request->nama,
-            'nomor' => $request->nomor,
-            'jk' => $request->jk,
-        ]);
+        'jurusan_id' => 'nullable|array|min:1',
+        'jurusan_id.*' => 'integer|exists:jurusan,id',
 
-        // Hapus semua relasi lama dan update dengan yang baru
-        $guru->mapel()->detach();
-        
+        'kelas_id' => 'nullable|array|min:1',
+        'kelas_id.*' => 'integer|exists:kelas,id',
+
+        'mapel_id' => 'nullable|array|min:1',
+        'mapel_id.*' => 'integer|exists:mapels,id',
+    ]);
+
+    // Ambil Data Guru
+    $guru = Guru::findOrFail($id);
+    $guru->update([
+        'nama' => $request->nama,
+        'nomor' => $request->nomor,
+        'jk' => $request->jk,
+    ]);
+
+    // Jika jurusan_id, kelas_id, dan mapel_id kosong, jangan update
+    if ($request->has('jurusan_id') && $request->has('kelas_id') && $request->has('mapel_id')) {
+        $syncData = [];
         foreach ($request->jurusan_id as $index => $jurusanId) {
-            $guru->mapel()->attach($request->mapel_id[$index], [
-                'jurusan_id' => $jurusanId,
-                'kelas_id' => $request->kelas_id[$index],
-            ]);
+            if (isset($request->mapel_id[$index]) && isset($request->kelas_id[$index])) {
+                $syncData[$request->mapel_id[$index]] = [
+                    'jurusan_id' => $jurusanId,
+                    'kelas_id' => $request->kelas_id[$index],
+                ];
+            }
         }
 
-        return redirect()->back()->with('success', 'Data guru berhasil diperbarui');
+        // Sync Relasi Many-to-Many
+        $guru->mapel()->sync($syncData);
     }
+
+    return redirect()->back()->with('success', 'Data guru berhasil diperbarui');
+}
+
 
 
     public function showUploads()

@@ -103,43 +103,13 @@ class KelasController extends Controller
     }
 }
 
-    
-    
-
-
-
-    // public function showKelas($mapel_id)
-    // {
-    //     $user = auth()->user();
-    
-    //     if ($user->role === 'admin') {
-    //         // Admin bisa melihat semua kelas yang memiliki mapel tersebut
-    //         $kelasData = Kelas::whereHas('guruMapel', function ($query) use ($mapel_id) {
-    //             $query->where('mapel_id', $mapel_id);
-    //         })->with('jurusan')->get();
-    //     } else {
-    //         // Guru hanya melihat kelas yang dia ajar sesuai mapel yang dia ajarkan
-    //         $kelasData = Kelas::whereHas('guruMapel', function ($query) use ($user, $mapel_id) {
-    //             $query->where('guru_id', $user->guru->id)
-    //                   ->where('mapel_id', $mapel_id);
-    //         })->with('jurusan')->get();
-    //     }
-    
-    //     return view('kelas.showkelas', compact('kelasData', 'mapel_id'));
-    // }
-    
-    
-
-
-    
-
     public function showSiswa($kelas)
-    { 
+    {
         $kelasData = Kelas::findOrFail($kelas);
         $siswaData = Siswa::where('kelas_id', $kelasData->id)->get();
         
         $jurusanData = Jurusan::findOrFail($kelasData->jurusan_id);    
         return view('kelas.showSiswa', compact('kelasData', 'siswaData', 'jurusanData'));
     }
-    
 }
+

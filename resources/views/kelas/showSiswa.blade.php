@@ -28,6 +28,7 @@
                             <th>No</th>
                             <th>NIS</th>
                             <th>Nama</th>
+                            <th>Jenis Kelamin</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -42,6 +43,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $siswa->nis }}</td>
                                 <td>{{ $siswa->nama }}</td>
+                                <td>{{ $siswa->jk }}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-{{ $siswa->id }}">
                                         <i class="bi bi-pen"></i> 
